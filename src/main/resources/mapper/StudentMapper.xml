@@ -3,7 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--mapper 文件相當於DAO介面的"實現類",namespace 屬性要指定實現介面全限定名xxx.xxx -->
 <mapper namespace="com.idv.steven.dao.StudentDAO">
-    <insert id="insertStudent" parameterType="com.idv.steven.vo.Student"><!-- id需對應方法名稱-->
+    <!--useGeneratedKeys 設置添加操作&修改操作時 是否需要回填生成的主鍵 -->
+    <!--keyProperty 設置回填主鍵值附值到參數物件的哪個屬性 -->
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="stuId">
         insert into tb_students(stu_num,stu_name,stu_gender,stu_age)
         values(#{stuNum},#{stuName},#{stuGender},#{stuAge})
     </insert>
@@ -70,7 +72,7 @@
 <!--    </select>&lt;!&ndash;limit #{arg0},#{arg1}&ndash;&gt;&lt;!&ndash;limit #{param1},#{param2}&ndash;&gt;-->
 
     <!--查詢總筆數-->
-    <select id="getCount">
+    <select id="getCount" resultType="int">
         select count(1) from tb_students
     </select>
 </mapper>

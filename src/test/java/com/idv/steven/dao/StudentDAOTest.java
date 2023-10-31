@@ -1,5 +1,6 @@
 package com.idv.steven.dao;
 
+import com.idv.steven.utils.MybatisUtils;
 import com.idv.steven.vo.Student;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.reflection.SystemMetaObject;
@@ -19,72 +20,34 @@ public class StudentDAOTest {
 
     @org.junit.Test
     public void testInsertStudent() {
-
-        try {
-            //用流讀取mybatis 配置文件
-            InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
-
-            SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-
-            //SqlSessionFactory表示mybatis的Session工廠(參數類型InputStream)
-            SqlSessionFactory factory =builder.build(is);
-
-            //取得DB Session連接物件:通過工廠方法設計模式
-            SqlSession sqlSession = factory.openSession();
-
+        //1.當我們獲取sqlSession物件時，就默認開啟了事務
+            //getSqlSession()已封裝false，預設開啟事務管理
+            SqlSession sqlSession = MybatisUtils.getSqlSession();
+        try{
             //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
             StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
-
             //測試是否有獲得 DAO 物件
-            System.out.println(studentDAO);
+//           System.out.println(studentDAO);
             //測試DAO中的方法
-            int i = studentDAO.insertStudent(new Student(0, "1003", "張三", "男", 22));
+            Student student = new Student(0, "1004", "張三", "男", 22);
+            int i = studentDAO.insertStudent(student);
+            //操作1
+            //操作2
+            //操作3
 
-            //事務管理需要寫
+            //2.操作完成，後須手動提交
             sqlSession.commit();
-
-            //if >0 成功(如無事務管理(commit)就算為1 DB也不會有任何數據)
-            System.out.println(i);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        }catch (Exception e){
+            //3.當操作出現異常調用rollback進行回滾
+            sqlSession.rollback();
         }
-
-
-
     }
+    //假設delete不須事務管理，getMapper()自動commit為true
     @Test
     public void testDeleteStudent() {
-        try {
-            //用流讀取mybatis 配置文件
-            InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
-
-            SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-
-            //SqlSessionFactory表示mybatis的Session工廠(參數類型InputStream)
-            SqlSessionFactory factory =builder.build(is);
-
-            //取得DB Session連接物件:通過工廠方法設計模式
-            SqlSession sqlSession = factory.openSession();
-
             //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
-            StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
-
-            //測試是否有獲得 DAO 物件
-            System.out.println(studentDAO);
-            //測試DAO中的方法
+            StudentDAO studentDAO = MybatisUtils.getMapper(StudentDAO.class);
             int i = studentDAO.deleteStudent("1001");
-
-            //事務管理需要寫
-            sqlSession.commit();
-
-            //if >0 成功(如無事務管理(commit)就算為1 DB也不會有任何數據)
-            System.out.println(i);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
     @Test
     public void testUpdateStudent(){
@@ -119,28 +82,13 @@ public class StudentDAOTest {
     }
     @Test
     public void testListStudents(){
-        try {
-            //用流讀取mybatis 配置文件
-            InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
-
-            SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-
-            //SqlSessionFactory表示mybatis的Session工廠(參數類型InputStream)
-            SqlSessionFactory factory =builder.build(is);
-
-            //取得DB Session連接物件:通過工廠方法設計模式
-            SqlSession sqlSession = factory.openSession();
-
-            //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
-            StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
-
-            //測試DAO中的方法
-            List<Student> list = studentDAO.listStudents();
-
-            assertNotNull(list);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        //不須事務管理直接取得DAO物件
+        StudentDAO studentDAO = MybatisUtils.getMapper(StudentDAO.class);
+        //測試DAO中的方法
+        List<Student> list = studentDAO.listStudents();
+        assertNotNull(list);
+        for(Student stu: list){
+            System.out.println(stu);
         }
     }
 
@@ -195,6 +143,31 @@ public class StudentDAOTest {
             List<Student> list = studentDAO.listStudentsByPage(0,1);
 
             System.out.println(list);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testGetCount(){
+        try {
+            //用流讀取mybatis 配置文件
+            InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
+
+            SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+
+            //SqlSessionFactory表示mybatis的Session工廠(參數類型InputStream)
+            SqlSessionFactory factory =builder.build(is);
+
+            //取得DB Session連接物件:通過工廠方法設計模式
+            SqlSession sqlSession = factory.openSession();
+
+            //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
+            StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
+            int count = studentDAO.getCount();
+
+            assertEquals(3, count);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
