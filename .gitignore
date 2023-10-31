@@ -37,4 +37,4 @@ build/
 ### Mac OS ###
 .DS_Store
 ### Ignore MyBatis config file ###
-mybatis-config.xml
+/src/main/resources/mybatis-config.xml
