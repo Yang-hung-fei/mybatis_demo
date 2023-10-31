@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTO Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 在enviroments 配置數據庫連接  -->
+    <!-- 在enviroments 可以定義多個連接  -->
+    <!--default屬性,用來指定使用哪個environment-->
+    <environments default="mysql">
+        <environment id="mysql">
+            <!--transactionManager用於配置數據庫管理方式  -->
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED"><!--dataSource 配置連線池 後面講解  -->
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/MYBATIS_TEST?characterEncoding=utf8&amp;useSSL=false"/>
+                <property name="username" value=""/>
+                <property name="password" value=""/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <!--mapper 配置 規範圍EMPTY 所以不可換行...-->
+        <mapper resource="mapper/StudentMapper.xml"></mapper>
+    </mappers>
+
+</configuration>

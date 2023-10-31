@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--mapper 文件相當於DAO介面的"實現類",namespace 屬性要指定實現介面全限定名xxx.xxx -->
+<mapper namespace="com.idv.steven.dao.StudentDAO">
+    <insert id="insertStudent" parameterType="com.idv.steven.vo.Student"><!-- id需對應方法名稱-->
+        insert into tb_students(stu_num,stu_name,stu_gender,stu_age)
+        values(#{stuNum},#{stuName},#{stuGender},#{stuAge})
+    </insert>
+
+    <delete id="deleteStudent"><!--左:對應DB 右:對應vo  -->
+        delete from tb_students where stu_num = #{stuNum}
+    </delete>
+
+    <update id="updateStudent">
+        update tb_students
+        set
+            stu_name=#{stuName},
+            stu_gender=#{stuGender},
+            stu_age=#{stuAge}
+        where
+            stu_num=#{stuNum}
+    </update>
+    <!--查詢必須由resultType指定查詢結果封裝物件的實體類-->
+    <!--指定返回集合類型(可省略) resultSets="java.util.List"-->
+<!--    <select id="listStudents" resultType="com.idv.steven.vo.Student" >-->
+<!--        &lt;!&ndash;如果欄位名稱不等於vo中的屬性名稱會錯誤(映射不到)&ndash;&gt;-->
+<!--        &lt;!&ndash;第1種解決方案:取別名&ndash;&gt;-->
+<!--        select sid stuId,stu_num stuNum ,stu_name stuName,stu_gender stuGender,stu_age stuAge-->
+<!--        from tb_students-->
+<!--    </select>-->
+
+    <!--如果欄位名稱不等於vo中的屬性名稱會錯誤(映射不到)-->
+    <!--第2種解決方案:利用resultMap來進義映射關係-->
+
+    <!--resultMap id="可取任意" -->
+    <!--因使用 resultMap type也指定類型所以 resultType 可省略 -->
+
+    <resultMap id="studentMap" type="com.idv.steven.vo.Student">
+        <id column="sid" property="stuId"/>
+        <result column="stu_num" property="stuNum"/>
+        <result column="stu_name" property="stuName"/>
+        <result column="stu_gender" property="stuGender"/>
+        <result column="stu_age" property="stuAge"/>
+    </resultMap>
+    <select id="listStudents" resultMap="studentMap"><!--省略resultType="com.idv.steven.vo.Student"-->
+        select sid,stu_num,stu_name,stu_gender,stu_age
+        from tb_students
+    </select>
+
+    <select id="queryStudent" resultMap="studentMap"><!--省略resultType="com.idv.steven.vo.Student"-->
+        select sid,stu_num,stu_name,stu_gender,stu_age
+        from tb_students
+        where stu_num=#{stuNum}
+    </select>
+
+    <!--分頁查詢-->
+    <!--#{start} 是偏移量（offset），#{pageSize} 是 limit-->
+    <!--方法1 註解,方法2 Map-->
+    <select id="listStudentsByPage" resultMap="studentMap"><!--省略resultType="com.idv.steven.vo.Student"-->
+        select sid,stu_num,stu_name,stu_gender,stu_age
+        from tb_students
+        limit #{start},#{pageSize}
+    </select>
+    <!--方法3 arg* 或 param1,param2 對應參數順序-->
+<!--    <select id="listStudentsByPage" resultMap="studentMap">&lt;!&ndash;省略resultType="com.idv.steven.vo.Student"&ndash;&gt;-->
+<!--        select sid,stu_num,stu_name,stu_gender,stu_age-->
+<!--        from tb_students-->
+<!--        limit #{param1},#{param2}-->
+<!--    </select>&lt;!&ndash;limit #{arg0},#{arg1}&ndash;&gt;&lt;!&ndash;limit #{param1},#{param2}&ndash;&gt;-->
+
+    <!--查詢總筆數-->
+    <select id="getCount">
+        select count(1) from tb_students
+    </select>
+</mapper>
