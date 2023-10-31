@@ -33,7 +33,6 @@ public interface StudentMapperAnno {
 
     // 查詢所有學生記錄
     @Select("select sid, stu_num, stu_name, stu_gender, stu_age from tb_students")
-
     List<Student> listStudents();
 
     // 根據學號查詢學生記錄
