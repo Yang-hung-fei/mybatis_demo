@@ -24,7 +24,7 @@ public class StudentDAOTest {
 //            SqlSession sqlSession = MybatisUtils.getSqlSession();
         try{
             //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
-            StudentDAO studentDAO = MybatisUtils.getMapper(StudentDAO.class);
+            StudentMapperAnno studentDAO = MybatisUtils.getMapper(StudentMapperAnno.class);
             //測試是否有獲得 DAO 物件
 //           System.out.println(studentDAO);
             //測試DAO中的方法
