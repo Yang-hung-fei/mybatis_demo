@@ -1,10 +1,11 @@
-package com.idv.steven.dao;
+package com.idv.steven.mapper;
 
 import com.idv.steven.vo.Student;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+@Mapper
 public interface StudentMapperAnno {
 
     @Results(id = "studentMap", value = {
@@ -33,18 +34,19 @@ public interface StudentMapperAnno {
 
     // 查詢所有學生記錄
     @Select("select sid, stu_num, stu_name, stu_gender, stu_age from tb_students")
+//    @ResultMap("studentMap")
     List<Student> listStudents();
 
     // 根據學號查詢學生記錄
     @Select("select sid, stu_num, stu_name, stu_gender, stu_age " +
             "from tb_students where stu_num=#{stuNum}")
-    @ResultMap("studentMap")
+//    @ResultMap("studentMap")
     Student queryStudent(String stuNum);
 
     // 分頁查詢學生記錄，方法一：@Param指定參數名
     @Select("select sid, stu_num, stu_name, stu_gender, stu_age " +
             "from tb_students limit #{start}, #{pageSize}")
-    @ResultMap("studentMap")
+//    @ResultMap("studentMap")
     List<Student> listStudentsByPage(@Param("start") int start, @Param("pageSize") int pageSize);
 
     // 查詢學生總數

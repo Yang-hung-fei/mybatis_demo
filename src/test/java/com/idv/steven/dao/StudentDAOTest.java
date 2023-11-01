@@ -1,9 +1,9 @@
 package com.idv.steven.dao;
 
+import com.idv.steven.mapper.StudentMapperAnno;
 import com.idv.steven.utils.MybatisUtils;
 import com.idv.steven.vo.Student;
 import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -22,24 +21,25 @@ public class StudentDAOTest {
     public void testInsertStudent() {
         //1.當我們獲取sqlSession物件時，就默認開啟了事務
             //getSqlSession()已封裝false，預設開啟事務管理
-            SqlSession sqlSession = MybatisUtils.getSqlSession();
+//            SqlSession sqlSession = MybatisUtils.getSqlSession();
         try{
             //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
-            StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
+            StudentDAO studentDAO = MybatisUtils.getMapper(StudentDAO.class);
             //測試是否有獲得 DAO 物件
 //           System.out.println(studentDAO);
             //測試DAO中的方法
-            Student student = new Student(0, "1004", "張三", "男", 22);
+            Student student = new Student(0, "1013", "張三", "男", 22);
             int i = studentDAO.insertStudent(student);
             //操作1
             //操作2
             //操作3
 
             //2.操作完成，後須手動提交
-            sqlSession.commit();
+//            sqlSession.commit();
         }catch (Exception e){
+            e.printStackTrace();
             //3.當操作出現異常調用rollback進行回滾
-            sqlSession.rollback();
+//            sqlSession.rollback();
         }
     }
     //假設delete不須事務管理，getMapper()自動commit為true
