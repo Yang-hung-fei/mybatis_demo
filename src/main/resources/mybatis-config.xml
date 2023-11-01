@@ -24,7 +24,7 @@
         <!--配置XML-->
 <!--    <mapper resource="mapper/StudentMapper.xml"></mapper>-->
 
-        <!--配置註解s-->
+        <!--配置註解-->
         <package name="com.idv.steven.mapper"/>
 <!--        <mapper class="com.idv.steven.mapper.StudentMapperAnno"/>-->
     </mappers>
