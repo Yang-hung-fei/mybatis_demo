@@ -28,12 +28,12 @@ public class StudentDAOTest {
             //測試是否有獲得 DAO 物件
 //           System.out.println(studentDAO);
             //測試DAO中的方法
-            Student student = new Student(0, "1013", "張三", "男", 22);
+            Student student = new Student(0, "1016", "張三", "男", 22);
             int i = studentDAO.insertStudent(student);
             //操作1
             //操作2
             //操作3
-
+            System.out.println(student);
             //2.操作完成，後須手動提交
 //            sqlSession.commit();
         }catch (Exception e){
@@ -83,7 +83,7 @@ public class StudentDAOTest {
     @Test
     public void testListStudents(){
         //不須事務管理直接取得DAO物件
-        StudentDAO studentDAO = MybatisUtils.getMapper(StudentDAO.class);
+        StudentMapperAnno studentDAO = MybatisUtils.getMapper(StudentMapperAnno.class);
         //測試DAO中的方法
         List<Student> list = studentDAO.listStudents();
         assertNotNull(list);
@@ -107,10 +107,10 @@ public class StudentDAOTest {
             SqlSession sqlSession = factory.openSession();
 
             //通過SqlSession物件調用getMapper方法獲得 DAO 介面物件，利用<動態代理>取得物件
-            StudentDAO studentDAO = sqlSession.getMapper(StudentDAO.class);
+            StudentMapperAnno studentDAO = sqlSession.getMapper(StudentMapperAnno.class);
 
             //測試DAO中的方法
-            Student student = studentDAO.queryStudent("1001");
+            Student student = studentDAO.queryStudent("1010");
 
             System.out.println(student);
 

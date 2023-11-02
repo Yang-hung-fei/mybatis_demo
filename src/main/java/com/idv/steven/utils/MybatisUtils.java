@@ -17,7 +17,7 @@ public class MybatisUtils {
         try {
             InputStream is = Resources.getResourceAsStream("mybatis-config.xml");
             SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
-            factory =builder.build(is);
+            factory =builder.build(is);//相當於 return new DefaultSqlSessionFactory(config);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

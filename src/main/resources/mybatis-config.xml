@@ -2,21 +2,46 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTO Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!-- 在enviroments 配置數據庫連接  -->
+
+    <!--properties 1.可以定義K,V 2.可以引用屬性文件-->
+    <properties resource="jdbc.properties">
+    </properties>
+
+
+    <settings>
+        <!--    “下划线转驼峰“规则自动映射二進制緩存-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--    二進制緩存-->
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+    
+    <typeAliases>
+        <typeAlias type="com.idv.steven.vo.Student" alias="Student"></typeAlias>
+    </typeAliases>
+
+    <!--plugins標籤用於配置Mybatis 插件。常見的有分頁查詢插件 etc … -->
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+    </plugins>
+
+    <!-- 在enviroments 配置數據庫連接 (類型轉換器) -->
     <!-- 在enviroments 可以定義多個連接  -->
     <!--default屬性,用來指定使用哪個environment-->
     <environments default="mysql">
         <environment id="mysql">
             <!--transactionManager用於配置數據庫管理方式  -->
+            <!--1.type="JDBC" 方式事務管理-->
+            <!--2.type="MANAGED" Spring整合時，依賴容器進行事務管理(不可手動commit / rollback)-->
             <transactionManager type="JDBC"></transactionManager>
-            <dataSource type="POOLED"><!--dataSource 配置連線池 後面講解  -->
-                <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/MYBATIS_TEST?characterEncoding=utf8&amp;useSSL=false"/>
-                <property name="username" value="root"/>
-                <property name="password" value="12345678"/>
+            <!--dataSource 配置連線池  1.UNPOOLED 不使用 2.POOLED 使用 3.JNDI -->
+            <dataSource type="POOLED">
+                <property name="driver" value="${mysql_driver}"/>
+                <property name="url" value="${mysql_url}"/>
+                <property name="username" value="${mysql_username}"/>
+                <property name="password" value="${mysql_password}"/>
             </dataSource>
         </environment>
-
     </environments>
     <mappers>
 
@@ -29,9 +54,4 @@
 <!--        <mapper class="com.idv.steven.mapper.StudentMapperAnno"/>-->
     </mappers>
 
-
-<!--    “下划线转驼峰“规则自动映射-->
-<!--    <settings>-->
-<!--        <setting name="mapUnderscoreToCamelCase" value="true"/>-->
-<!--    </settings>-->
 </configuration>

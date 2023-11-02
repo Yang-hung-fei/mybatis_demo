@@ -8,14 +8,6 @@ import java.util.List;
 @Mapper
 public interface StudentMapperAnno {
 
-    @Results(id = "studentMap", value = {
-            @Result(property = "stuId", column = "sid", id = true),
-            @Result(property = "stuNum", column = "stu_num"),
-            @Result(property = "stuName", column = "stu_name"),
-            @Result(property = "stuGender", column = "stu_gender"),
-            @Result(property = "stuAge", column = "stu_age")
-    })
-
     // 插入學生記錄
     @Insert("insert into tb_students(stu_num, stu_name, stu_gender, stu_age) " +
             "values(#{stuNum}, #{stuName}, #{stuGender}, #{stuAge})")
@@ -34,7 +26,13 @@ public interface StudentMapperAnno {
 
     // 查詢所有學生記錄
     @Select("select sid, stu_num, stu_name, stu_gender, stu_age from tb_students")
-    @ResultMap("studentMap")
+    @Results(id = "studentMap", value = {
+            @Result(property = "stuId", column = "sid", id = true),
+            @Result(property = "stuNum", column = "stu_num"),
+            @Result(property = "stuName", column = "stu_name"),
+            @Result(property = "stuGender", column = "stu_gender"),
+            @Result(property = "stuAge", column = "stu_age")
+    })
     List<Student> listStudents();
 
     // 根據學號查詢學生記錄

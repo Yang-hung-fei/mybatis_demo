@@ -3,9 +3,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--mapper 文件相當於DAO介面的"實現類",namespace 屬性要指定實現介面全限定名xxx.xxx -->
 <mapper namespace="com.idv.steven.dao.StudentDAO">
+
+    <cache type="" size="" readOnly="true"/>
+
+
     <!--useGeneratedKeys 設置添加操作&修改操作時 是否需要回填生成的主鍵 -->
     <!--keyProperty 設置回填主鍵值附值到參數物件的哪個屬性 -->
-    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="stuId">
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="stuId" timeout="5000">
+        <selectKey keyProperty="stuId" resultType="java.lang.Integer">
+            select Last_insert_id()
+        </selectKey>
         insert into tb_students(stu_num,stu_name,stu_gender,stu_age)
         values(#{stuNum},#{stuName},#{stuGender},#{stuAge})
     </insert>
@@ -38,15 +45,20 @@
     <!--resultMap id="可取任意" -->
     <!--因使用 resultMap type也指定類型所以 resultType 可省略 -->
 
-    <resultMap id="studentMap" type="com.idv.steven.vo.Student">
+    <resultMap id="studentMap" type="Student">
         <id column="sid" property="stuId"/>
         <result column="stu_num" property="stuNum"/>
         <result column="stu_name" property="stuName"/>
         <result column="stu_gender" property="stuGender"/>
         <result column="stu_age" property="stuAge"/>
     </resultMap>
+    
+    <!--sql 標籤 用於省略相同的sql重複編碼 ex:sid,stu_num,stu_name,stu_gender,stu_age-->
+    <sql id="se">sid,stu_num,stu_name,stu_gender,stu_age</sql>
+
     <select id="listStudents" resultMap="studentMap"><!--省略resultType="com.idv.steven.vo.Student"-->
-        select sid,stu_num,stu_name,stu_gender,stu_age
+        <!--引用sql標籤 取代重複sql指令-->
+        select <include refid="se"/> from tb_students
         from tb_students
     </select>
 
@@ -58,7 +70,7 @@
 
     <!--分頁查詢-->
     <!--#{start} 是偏移量（offset），#{pageSize} 是 limit-->
-    <!--方法1 註解,方法2 Map-->
+    <!--方法1 @Param註解,方法2 Map-->
     <select id="listStudentsByPage" resultMap="studentMap"><!--省略resultType="com.idv.steven.vo.Student"-->
         select sid,stu_num,stu_name,stu_gender,stu_age
         from tb_students
