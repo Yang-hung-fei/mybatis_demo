@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--mapper 文件相當於DAO介面的"實現類",namespace 屬性要指定實現介面全限定名xxx.xxx -->
 <mapper namespace="com.idv.steven.dao.DetailsDAO">
-    <insert id="insertDetail" useGeneratedKeys="true" keyProperty="detail_id" timeout="5000">
+    <insert id="insertDetail" useGeneratedKeys="true" keyProperty="detailId" timeout="5000">
         insert into MYBATIS_TEST.details(user_addr, user_tel, user_desc, uid)
         values (#{userAddr}, #{userTel}, #{userDesc}, #{userId})
     </insert>
