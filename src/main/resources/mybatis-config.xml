@@ -47,10 +47,13 @@
         <!--mapper 配置 規範圍EMPTY 所以不可換行...-->
         <!--配置XML-->
         <mapper resource="mapper/StudentMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/DetailsMapper.xml"/>
 
         <!--配置註解-->
 <!--        <package name="com.idv.steven.mapper"/>-->
         <mapper class="com.idv.steven.mapper.StudentMapperAnno"/>
+
     </mappers>
 
 </configuration>
